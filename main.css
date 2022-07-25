@@ -22,7 +22,7 @@ body {
 }
 .header > h3 {
     display: inline-block;
-    margin: 20px 10px 10 10px;
+    margin: 10px 10px 10 10px;
 }
 button {
     background-color: #a1a1a1;
@@ -42,13 +42,16 @@ input[type="number"] {
 /** Remove arrows inside of an number input **/
 
 .container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     border: 1px solid #e1e1e1;
     padding: 20px;
     border-radius: 15px;
+}
+
+.center-center {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
 }
 .container > .panel {
     margin-bottom: 5px;
@@ -100,10 +103,6 @@ input[type="number"] {
     border: 1px solid rgb(99, 99, 102);
 }
 #hold_modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     height: 20rem;
     width: 20rem;
     background-color: rgba(174, 174, 178, 0.5);
@@ -111,10 +110,6 @@ input[type="number"] {
     backdrop-filter: blur(8px);
 }
 #hold_modal > div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     font-size: 1.4rem;
 }
 #hold_modal > div > span {

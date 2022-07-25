@@ -12,8 +12,6 @@ function HoldButton(element) {
         throw new Error("HoldButton requires DOM object");
     }
     
-    let onUnHold = function(){};
-    
     const has = {
         "onhold" : false,
         "onunhold" : false
@@ -49,8 +47,10 @@ function HoldButton(element) {
         }
         
         try {
-            // Main Function
-            userdata["click"]();
+            if(e.type != "mouseleave"){
+                // Main Function
+                userdata["click"](userdata);
+            }
              
             // Unhold Function
             callbacks["unhold"](userdata);
@@ -93,20 +93,9 @@ function HoldButton(element) {
                  * My best way of solving...mouseup did not fire if
                  * the cursor is out of element.
                  * */
-                element.addEventListener('mouseleave', (e) => {
-                    if(e.cancelable){
-                        e.preventDefault();
-                    }
-                    
-                    clearTimeout(ival);
-                    
-                    // Unhold Function
-                    callbacks["unhold"](userdata);
-                    has.onhold = false;
-                }, false);
-                
-                element.addEventListener('mouseup', end, false)
-                element.addEventListener('mousedown', start, false)
+                element.addEventListener('mouseleave', end, false);
+                element.addEventListener('mouseup', end, false);
+                element.addEventListener('mousedown', start, false);
             } else {
                 // I don't know what to put here. Hahaha
             }
@@ -119,13 +108,13 @@ function HoldButton(element) {
             
             has.onUnHold = true;
             
-            callbacks["unhold"] = callback
+            callbacks["unhold"] = callback;
         }
     }
 }
 
 /**
-  * Written By Jovan De Guia
-  * Project Name: Press and Hold For Web Buttons
-  * Github: jxmked
-  * */
+ * Written By Jovan De Guia
+ * Project Name: Press and Hold For Web Buttons
+ * Github: jxmked
+ * */

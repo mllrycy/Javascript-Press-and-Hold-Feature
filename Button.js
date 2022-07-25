@@ -7,27 +7,27 @@ function HoldButton(element) {
     /**
      * Click and Hold or Tap and hold a button to initiate extra feature.
      * */
-
+     
     if(! element instanceof Object) {
         throw new Error("HoldButton requires DOM object");
     }
     
     let onUnHold = function(){};
-
+    
     const has = {
         "onhold" : false,
         "onunhold" : false
     };
-
+    
     const callbacks = {
         "hold" : function(){},
         "unhold" : function(){},
         "main" : function(){}
     };
-
+    
     let ival; // Store setTimeout event data
     let rpTime; // Initiate extra feature after a given time in millisecond
-
+    
     // Save some data that are related to this function
     const userdata = {};
     
@@ -37,17 +37,17 @@ function HoldButton(element) {
         if(e.cancelable){
             e.preventDefault();
         }
-            
+        
         ival = setTimeout(() => {
             callbacks["hold"](userdata);
         }, rpTime);
     }
-
+    
     const end = (e) => {
         if(e.cancelable){
             e.preventDefault();
         }
-
+        
         try {
             // Main Function
             userdata["click"]();
@@ -55,13 +55,13 @@ function HoldButton(element) {
             // Unhold Function
             callbacks["unhold"](userdata);
         } catch(TypeError){}
-
+        
         /** Stop or Prevent Timeout to initiate **/
          clearTimeout(ival);
-
+         
         has.onhold = false;
     }
-
+    
     return {
         "onClick" : (callback) => {
             if(! (callback && {}.toString.call(callback) === '[object Function]')){
@@ -75,20 +75,20 @@ function HoldButton(element) {
         
         "onHold" : (callback, responseTime=1000) => {
             rpTime = responseTime;
-
+            
             if(has.onhold) {
                 throw new Error("HoldButton.onHold can be call only once.");
             }
             
             callbacks["hold"] = callback;
-
+            
             if('ontouchstart' in element && 'ontouchend' in element) {
                 // For Mobile Devices
-                element.addEventListener("touchend", end, true);
-                element.addEventListener("touchstart", start, true);
+                element.addEventListener("touchend", end, false);
+                element.addEventListener("touchstart", start, false);
             } else if('onmousedown' in element && 'onmouseup' in element) {
                 // For Desktop type devices
-
+                
                 /**
                  * My best way of solving...mouseup did not fire if
                  * the cursor is out of element.
@@ -97,28 +97,28 @@ function HoldButton(element) {
                     if(e.cancelable){
                         e.preventDefault();
                     }
-
+                    
                     clearTimeout(ival);
                     
                     // Unhold Function
                     callbacks["unhold"](userdata);
                     has.onhold = false;
-                }, true);
-
-                element.addEventListener('mouseup', end, true)
-                element.addEventListener('mousedown', start, true)
+                }, false);
+                
+                element.addEventListener('mouseup', end, false)
+                element.addEventListener('mousedown', start, false)
             } else {
                 // I don't know what to put here. Hahaha
             }
         },
-
+        
         "onUnHold" : (callback) => {
             if(has.onUnHold) {
                 throw new Error("HoldButton.onUnHold can be call only once.");
             }
-
+            
             has.onUnHold = true;
-
+            
             callbacks["unhold"] = callback
         }
     }
